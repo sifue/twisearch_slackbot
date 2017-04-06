@@ -1,52 +1,42 @@
 # Twisearch Slackbot
-twitterのキーワードを検索して、新しいつぶやきが見つかるたびに、Slackの特定のStreaming APIを利用せず、REST Search APIを利用しています。
+twitterのキーワードを検索して、新しいつぶやきが見つかるたびに、Slackに投稿します。
+Streaming APIを利用せず、REST Search APIを利用しています。
 
 # ビルド方法
-javaとsbtをインストールの上、
+Java(java8以上)とsbtをインストールの上、
 
 ```sh
 $ sbt
 > assembly
 ```
-これでtargetディレクトリの中に、twisearch_ircbot-assembly-2.0.jarがビルドされます。
+これでtargetディレクトリの中に、twisearch_slackbot-assembly-X.X.jarがビルドされます。
 
 # 使い方
-twisearch_ircbot-assembly-2.0.jarと同じディレクトリに、
-twisearch_ircbot_template.propertiesを正しく編集して、
-twisearch_ircbot.propertiesというファイル名で保存ください。
+twisearch_ircbot-assembly-X.X.jarと同じディレクトリに、
+application_template.confを正しく編集して、
+application.confというファイル名で保存ください。
 
 ```properties
-irc.address = hostname
-irc.channel = #channelname
-irc.nickname = twisearch_ircbot
-irc.charset = UTF-8
-limitCount = 3
-intervalSec = 60
-keyword = #MT2
-messageFormat = interval:%1$s keyword:%2$s count:%3$s
-noticeFormat = @%1$s %2$s %3$s
-consumerKey = consumerKey
-consumerSecret = consumerSecret
-accessToken = acessToken
-accessTokenSecret = accessTokenSecret
+app {
+  slackWebHookUrl = "https://hooks.slack.com/services/hoge/fuga/hege"
+  intervalSec = 60
+  keyword = "\"test\"OR\"テスト\"OR\"hoge\"OR\"fuga\""
+  messageFormat = "https://twitter.com/%1$s/status/%2$s"
+  consumerKey = "consumerKey"
+  consumerSecret = "consumerSecret"
+  accessToken = "accessToken"
+  accessTokenSecret = "accessTokenSecret"
+}
 ```
 
-twisearch_ircbot.propertiesの内容のうち、consumerKey、consumerSecret、accessToken、accessTokenSecretはTwitter Developpers https://dev.twitter.com/ より、ログインの後、アプリケーションを作成して、これらのキーとトークンを発行してご利用ください。
+Twisearch SlackbotのアプリはSlackでAppを作成して、WebHook Incomeを許可し、そこでWebHook URLを特定のチャンネルに対して作成してそれを利用して下さい。
+application.confの内容のうち、consumerKey、consumerSecret、accessToken、accessTokenSecretはTwitter Developpers https://dev.twitter.com/ より、ログインの後、アプリケーションを作成して、これらのキーとトークンを発行してご利用ください。
 
-なお日本語などを入れたい場合には、javaのnative2asciiコマンドを利用してascii化する必要があります。
-http://symfo.web.fc2.com/js-sample/jq/sample2.html
-以上のようなサイトでも変換できます。
 
 設定の後、
 
 ```sh
-$java -jar twisearch_ircbot-assembly-2.0.jar
+$java -jar twisearch_ircbot-assembly-X.X.jar
 ```
 
-で実行することができます。
-またIRCのボットが入っているチャンネルにて
-```
-ping nickname
-```
-とするとWorking now.とnoticeを返します。
-
+で実行することができます。Procfile などを作成して、 Heroku や Dokku にあげてください。
