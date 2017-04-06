@@ -9,10 +9,10 @@ Java(java8以上)とsbtをインストールの上、
 $ sbt
 > assembly
 ```
-これでtargetディレクトリの中に、twisearch_slackbot-assembly-X.X.jarがビルドされます。
+これでtarget/scala-2.11ディレクトリの中に、twisearch_slackbot-assembly-X.X.jarがビルドされます。
 
 # 使い方
-twisearch_ircbot-assembly-X.X.jarと同じディレクトリに、
+twisearch_slackbot-assembly-X.X.jarと同じディレクトリに、
 application_template.confを正しく編集して、
 application.confというファイル名で保存ください。
 
@@ -36,7 +36,7 @@ application.confの内容のうち、consumerKey、consumerSecret、accessToken�
 設定の後、
 
 ```sh
-$java -jar twisearch_ircbot-assembly-X.X.jar
+$java -jar twisearch_slackbot-assembly-X.X.jar
 ```
 
 で実行することができます。Procfile などを作成して、 Heroku や Dokku にあげてください。
