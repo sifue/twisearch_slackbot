@@ -1,0 +1,10 @@
+app {
+  slackWebHookUrl = "https://hooks.slack.com/services/hoge/fuga/hege"
+  intervalSec = 60
+  keyword = "N高等学校"
+  messageFormat = "https://twitter.com/%1$s/status/%2$s"
+  consumerKey = "consumerKey"
+  consumerSecret = "consumerSecret"
+  accessToken = "accessToken"
+  accessTokenSecret = "accessTokenSecret"
+}

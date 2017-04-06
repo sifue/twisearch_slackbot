@@ -1,0 +1,5 @@
+.idea/
+target/
+twisearch_ircbot.properties
+twisearch_slackbot.iml
+application.conf
