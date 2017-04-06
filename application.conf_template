@@ -1,7 +1,7 @@
 app {
   slackWebHookUrl = "https://hooks.slack.com/services/hoge/fuga/hege"
   intervalSec = 60
-  keyword = "N高等学校"
+  keyword = "\"test\"OR\"テスト\"OR\"hoge\"OR\"fuga\""
   messageFormat = "https://twitter.com/%1$s/status/%2$s"
   consumerKey = "consumerKey"
   consumerSecret = "consumerSecret"
