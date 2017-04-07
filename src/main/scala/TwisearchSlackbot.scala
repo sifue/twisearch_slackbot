@@ -28,6 +28,7 @@ object TwisearchSlackbot extends App {
   val searcher = actorSystem.actorOf(Props(classOf[TwitterSearcher],
     slackClient,
     conf.intervalSec,
+    conf.isSendRetweet,
     conf.messageFormat,
     twitter))
 
@@ -47,6 +48,7 @@ class TwisearchSlackbotConfig(args: Array[String]) {
 
   val intervalSec = conf.getInt("intervalSec")
   val keyword = conf.getString("keyword")
+  val isSendRetweet = conf.getBoolean("isSendRetweet")
   val messageFormat = conf.getString("messageFormat")
 
   val consumerKey = conf.getString("consumerKey")

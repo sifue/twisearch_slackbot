@@ -14,12 +14,14 @@ case class SearchTwitter(keyword: String)
  * Actor of Searcher.
  * @param client
  * @param intervalSec
+ * @param isSendRetweet
  * @param messageFormat
  * @param twitter
  */
 class TwitterSearcher(
                        client: SlackClient,
                        intervalSec: Int,
+                       isSendRetweet: Boolean,
                        messageFormat: String,
                        twitter: Twitter
   ) extends Actor with ActorLogging {
@@ -32,9 +34,16 @@ class TwitterSearcher(
       query.setQuery(keyword)
       query.setSinceId(maxId)
       query.setResultType(Query.RECENT)
-      query.setCount(15) // max 100 https://dev.twitter.com/rest/reference/get/search/tweets
-      val tweets = twitter.search(query).getTweets().reverse
+      query.setCount(100) // max 100 https://dev.twitter.com/rest/reference/get/search/tweets
+
+      val tweets = if (isSendRetweet) {
+        twitter.search(query).getTweets().reverse
+      } else {
+        twitter.search(query).getTweets().reverse.filter(t => !t.isRetweet)
+      }
+
       if (maxId != 0L) tweets.filter(t => t.getId() > maxId).foreach(sendTweetToSlack)
+
       tweets.foreach(t => {
         if (t.getId() > maxId) maxId = t.getId()
       })
