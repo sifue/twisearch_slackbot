@@ -13,7 +13,7 @@ import com.typesafe.config._
  */
 object TwisearchSlackbot extends App {
   val conf = new TwisearchSlackbotConfig(args)
-  val slackClient = new SlackClient(conf.webHookUrl)
+  val slackClient = new SlackClient(conf.webHookUrls)
 
   val twitter = TwitterFactory.getSingleton
   twitter.setOAuthConsumer(
@@ -44,7 +44,7 @@ class TwisearchSlackbotConfig(args: Array[String]) {
   val configFilePath = if(args.length > 0) args(0) else "application.conf"
   private[this] val conf: Config = ConfigFactory.parseFile(new File(configFilePath)).getConfig("app")
 
-  val webHookUrl = conf.getString("slackWebHookUrl")
+  val webHookUrls: Seq[String] = conf.getStringList("slackWebHookUrls").toArray(Array[String]())
 
   val intervalSec = conf.getInt("intervalSec")
   val keyword = conf.getString("keyword")

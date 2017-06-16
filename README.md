@@ -22,7 +22,7 @@ application.confというファイル名で保存ください。
 
 ```properties
 app {
-  slackWebHookUrl = "https://hooks.slack.com/services/hoge/fuga/hege"
+  slackWebHookUrls = ["https://hooks.slack.com/services/hoge/fuga/hege"]
   intervalSec = 60
   keyword = "\"test\"OR\"テスト\"OR\"hoge\"OR\"fuga\""
   isSendRetweet = false

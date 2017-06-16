@@ -4,7 +4,7 @@ assemblySettings
 
 name := "twisearch_slackbot"
 
-version := "1.1"
+version := "1.2"
 
 scalaVersion := "2.11.8"
 
