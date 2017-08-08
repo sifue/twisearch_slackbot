@@ -14,6 +14,7 @@ case class SearchTwitter(keyword: String)
  * Actor of Searcher.
  * @param client
  * @param intervalSec
+ * @param ignoreScreenNames
  * @param isSendRetweet
  * @param messageFormat
  * @param twitter
@@ -21,6 +22,7 @@ case class SearchTwitter(keyword: String)
 class TwitterSearcher(
                        client: SlackClient,
                        intervalSec: Int,
+                       ignoreScreenNames:  Seq[String],
                        isSendRetweet: Boolean,
                        messageFormat: String,
                        twitter: Twitter
@@ -37,10 +39,15 @@ class TwitterSearcher(
       query.setCount(100) // max 100 https://dev.twitter.com/rest/reference/get/search/tweets
 
       val tweets = if (isSendRetweet) {
-        twitter.search(query).getTweets().reverse
+        twitter.search(query)
+          .getTweets()
+          .reverse
       } else {
-        twitter.search(query).getTweets().reverse.filter(t => !t.isRetweet)
-      }
+        twitter.search(query)
+          .getTweets()
+          .reverse
+          .filter(t => !t.isRetweet)
+      }.filter(t => !ignoreScreenNames.contains(t.getUser.getScreenName))
 
       if (maxId != 0L) tweets.filter(t => t.getId() > maxId).foreach(sendTweetToSlack)
 
