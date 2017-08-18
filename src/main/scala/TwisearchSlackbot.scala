@@ -7,13 +7,16 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import twitter4j.TwitterFactory
 import twitter4j.auth.AccessToken
 import com.typesafe.config._
+import okhttp3.OkHttpClient
 
 /**
  * Main application.
  */
 object TwisearchSlackbot extends App {
   val conf = new TwisearchSlackbotConfig(args)
-  val slackClient = new SlackClient(conf.webHookUrls)
+  private val httpClient = new OkHttpClient
+  val slackClient = new SlackClient(httpClient, conf.slackWebHookUrls)
+  val hubotClient = new HubotClient(httpClient, conf.hubotWebHookUrl, conf.hubotWebHookRoom)
 
   val twitter = TwitterFactory.getSingleton
   twitter.setOAuthConsumer(
@@ -27,6 +30,7 @@ object TwisearchSlackbot extends App {
   val actorSystem = ActorSystem("twisearch")
   val searcher = actorSystem.actorOf(Props(classOf[TwitterSearcher],
     slackClient,
+    hubotClient,
     conf.intervalSec,
     conf.ignoreScreenNames,
     conf.isSendRetweet,
@@ -45,7 +49,7 @@ class TwisearchSlackbotConfig(args: Array[String]) {
   val configFilePath = if(args.length > 0) args(0) else "application.conf"
   private[this] val conf: Config = ConfigFactory.parseFile(new File(configFilePath)).getConfig("app")
 
-  val webHookUrls: Seq[String] = conf.getStringList("slackWebHookUrls").toArray(Array[String]())
+  val slackWebHookUrls: Seq[String] = conf.getStringList("slackWebHookUrls").toArray(Array[String]())
 
   val intervalSec = conf.getInt("intervalSec")
   val keyword = conf.getString("keyword")
@@ -58,4 +62,7 @@ class TwisearchSlackbotConfig(args: Array[String]) {
   val consumerSecret = conf.getString("consumerSecret")
   val accessToken = conf.getString("accessToken")
   val accessTokenSecret = conf.getString("accessTokenSecret")
+
+  val hubotWebHookUrl = conf.getString("hubotWebHookUrl")
+  val hubotWebHookRoom = conf.getString("hubotWebHookRoom")
 }

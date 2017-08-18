@@ -32,6 +32,8 @@ app {
   consumerSecret = "consumerSecret"
   accessToken = "accessToken"
   accessTokenSecret = "accessTokenSecret"
+  hubotWebHookUrl = ""
+  hubotWebHookRoom = ""
 }
 ```
 

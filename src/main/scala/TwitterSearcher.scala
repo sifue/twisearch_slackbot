@@ -12,7 +12,7 @@ case class SearchTwitter(keyword: String)
 
 /**
  * Actor of Searcher.
- * @param client
+ * @param slackClient
  * @param intervalSec
  * @param ignoreScreenNames
  * @param isSendRetweet
@@ -20,7 +20,8 @@ case class SearchTwitter(keyword: String)
  * @param twitter
  */
 class TwitterSearcher(
-                       client: SlackClient,
+                       slackClient: SlackClient,
+                       hubotClient: HubotClient,
                        intervalSec: Int,
                        ignoreScreenNames:  Seq[String],
                        isSendRetweet: Boolean,
@@ -49,7 +50,14 @@ class TwitterSearcher(
           .filter(t => !t.isRetweet)
       }.filter(t => !ignoreScreenNames.contains(t.getUser.getScreenName))
 
-      if (maxId != 0L) tweets.filter(t => t.getId() > maxId).foreach(sendTweetToSlack)
+      if (maxId != 0L) {
+        tweets
+          .filter(t => t.getId() > maxId)
+          .foreach(t => {
+            sendTweetToSlack(t)
+            sendTweetToHubot(t)
+          })
+      }
 
       tweets.foreach(t => {
         if (t.getId() > maxId) maxId = t.getId()
@@ -60,7 +68,13 @@ class TwitterSearcher(
 
   private def sendTweetToSlack(t: Status): Unit = {
     val message = messageFormat.format(t.getUser().getScreenName(), t.getId())
-    client.postMessage(message)
-    log.info(s"Tweet: @${t.getUser().getScreenName()} ${t.getText()}")
+    slackClient.postMessage(message)
+    log.info(s"Tweet to Slack: @${t.getUser().getScreenName()} ${t.getText()}")
+  }
+
+  private def sendTweetToHubot(t: Status): Unit = {
+    val message = messageFormat.format(t.getUser().getScreenName(), t.getId())
+    hubotClient.postMessage(message)
+    log.info(s"Tweet to Hubot: @${t.getUser().getScreenName()}")
   }
 }
