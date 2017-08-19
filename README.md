@@ -25,7 +25,7 @@ app {
   slackWebHookUrls = ["https://hooks.slack.com/services/hoge/fuga/hege"]
   intervalSec = 60
   keyword = "\"test\"OR\"テスト\"OR\"hoge\"OR\"fuga\""
-	ignoreScreenNames = ["sifue_4466"]
+  ignoreScreenNames = ["sifue_4466"]
   isSendRetweet = false
   messageFormat = "https://twitter.com/%1$s/status/%2$s"
   consumerKey = "consumerKey"
