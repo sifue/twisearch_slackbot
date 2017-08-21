@@ -26,6 +26,7 @@ app {
   intervalSec = 60
   keyword = "\"test\"OR\"テスト\"OR\"hoge\"OR\"fuga\""
   ignoreScreenNames = ["sifue_4466"]
+  ignoreRegex = ""
   isSendRetweet = false
   messageFormat = "https://twitter.com/%1$s/status/%2$s"
   consumerKey = "consumerKey"

@@ -33,6 +33,7 @@ object TwisearchSlackbot extends App {
     hubotClient,
     conf.intervalSec,
     conf.ignoreScreenNames,
+    conf.ignoreRegex,
     conf.isSendRetweet,
     conf.messageFormat,
     twitter))
@@ -54,6 +55,7 @@ class TwisearchSlackbotConfig(args: Array[String]) {
   val intervalSec = conf.getInt("intervalSec")
   val keyword = conf.getString("keyword")
   val ignoreScreenNames: Seq[String] = conf.getStringList("ignoreScreenNames").toArray(Array[String]())
+  val ignoreRegex = conf.getString("ignoreRegex")
 
   val isSendRetweet = conf.getBoolean("isSendRetweet")
   val messageFormat = conf.getString("messageFormat")

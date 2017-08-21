@@ -1,8 +1,11 @@
-import akka.actor.{ActorLogging, Actor}
+import akka.actor.{Actor, ActorLogging}
 import twitter4j.Twitter
 import twitter4j.Query
+
 import scala.collection.JavaConversions._
 import twitter4j.Status
+
+import scala.util.matching.Regex
 
 /**
  * Message object of searching.
@@ -15,6 +18,7 @@ case class SearchTwitter(keyword: String)
  * @param slackClient
  * @param intervalSec
  * @param ignoreScreenNames
+ * @param ignoreRegex
  * @param isSendRetweet
  * @param messageFormat
  * @param twitter
@@ -23,7 +27,8 @@ class TwitterSearcher(
                        slackClient: SlackClient,
                        hubotClient: HubotClient,
                        intervalSec: Int,
-                       ignoreScreenNames:  Seq[String],
+                       ignoreScreenNames: Seq[String],
+                       ignoreRegex: String,
                        isSendRetweet: Boolean,
                        messageFormat: String,
                        twitter: Twitter
@@ -39,7 +44,7 @@ class TwitterSearcher(
       query.setResultType(Query.RECENT)
       query.setCount(100) // max 100 https://dev.twitter.com/rest/reference/get/search/tweets
 
-      val tweets = if (isSendRetweet) {
+      var tweets = if (isSendRetweet) {
         twitter.search(query)
           .getTweets()
           .reverse
@@ -49,6 +54,11 @@ class TwitterSearcher(
           .reverse
           .filter(t => !t.isRetweet)
       }.filter(t => !ignoreScreenNames.contains(t.getUser.getScreenName))
+
+      if(!ignoreRegex.isEmpty) {
+        val regexp = new Regex(ignoreRegex)
+        tweets = tweets.filter(t => regexp.findFirstIn(t.getText).isEmpty)
+      }
 
       if (maxId != 0L) {
         tweets
