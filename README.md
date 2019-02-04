@@ -9,7 +9,7 @@ Java(Java8以上)とsbtをインストールの上、
 $ sbt
 > assembly
 ```
-これでtarget/scala-2.11ディレクトリの中に、twisearch_slackbot-assembly-X.X.jarがビルドされます。
+これでtarget/scala-2.12ディレクトリの中に、twisearch_slackbot-assembly-X.X.jarがビルドされます。
 
 # ビルド済みバイナリ
 
@@ -29,6 +29,7 @@ app {
   ignoreRegex = ""
   isSendRetweet = false
   messageFormat = "https://twitter.com/%1$s/status/%2$s"
+  rtMessageFormat = "%1$s RT `https://twitter.com/%1$s/status/%2$s`"
   consumerKey = "consumerKey"
   consumerSecret = "consumerSecret"
   accessToken = "accessToken"
