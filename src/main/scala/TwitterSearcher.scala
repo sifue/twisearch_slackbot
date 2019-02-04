@@ -81,7 +81,13 @@ class TwitterSearcher(
 
   private def sendTweetToSlack(t: Status): Unit = {
     val message = if(t.isRetweet) {
-      rtMessageFormat.format(t.getUser().getScreenName(), t.getId())
+      rtMessageFormat.format(
+        t.getUser().getScreenName(),
+        t.getId(),
+        t.getUser().getName(),
+        t.getText().substring(0, 25) + "…",
+        t.getRetweetCount()
+      )
     } else {
       messageFormat.format(t.getUser().getScreenName(), t.getId())
     }
@@ -91,7 +97,13 @@ class TwitterSearcher(
 
   private def sendTweetToHubot(t: Status): Unit = {
     val message = if(t.isRetweet) {
-      rtMessageFormat.format(t.getUser().getScreenName(), t.getId())
+      rtMessageFormat.format(
+        t.getUser().getScreenName(),
+        t.getId(),
+        t.getUser().getName(),
+        t.getText().substring(0, 25) + "…",
+        t.getRetweetCount()
+      )
     } else {
       messageFormat.format(t.getUser().getScreenName(), t.getId())
     }

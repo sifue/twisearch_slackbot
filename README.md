@@ -27,9 +27,9 @@ app {
   keyword = "\"test\"OR\"テスト\"OR\"hoge\"OR\"fuga\""
   ignoreScreenNames = ["sifue_4466"]
   ignoreRegex = ""
-  isSendRetweet = false
+  isSendRetweet = true
   messageFormat = "https://twitter.com/%1$s/status/%2$s"
-  rtMessageFormat = "%1$s RT `https://twitter.com/%1$s/status/%2$s`"
+  rtMessageFormat = "%3$s %5$s%4$s `https://twitter.com/%1$s/status/%2$s`"
   consumerKey = "consumerKey"
   consumerSecret = "consumerSecret"
   accessToken = "accessToken"
