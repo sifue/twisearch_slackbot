@@ -36,6 +36,7 @@ object TwisearchSlackbot extends App {
     conf.ignoreRegex,
     conf.isSendRetweet,
     conf.messageFormat,
+    conf.rtMessageFormat,
     twitter))
 
   actorSystem.scheduler.schedule(0 seconds, conf.intervalSec seconds, searcher, SearchTwitter(conf.keyword))
@@ -59,6 +60,7 @@ class TwisearchSlackbotConfig(args: Array[String]) {
 
   val isSendRetweet = conf.getBoolean("isSendRetweet")
   val messageFormat = conf.getString("messageFormat")
+  val rtMessageFormat = conf.getString("rtMessageFormat")
 
   val consumerKey = conf.getString("consumerKey")
   val consumerSecret = conf.getString("consumerSecret")

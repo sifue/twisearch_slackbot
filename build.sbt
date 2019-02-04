@@ -1,12 +1,10 @@
-import AssemblyKeys._
-
-assemblySettings
-
 name := "twisearch_slackbot"
 
-version := "1.5"
+version := "1.6"
 
-scalaVersion := "2.12.3"
+scalaVersion := "2.12.7"
+
+test in assembly := {}
 
 mainClass in assembly := Some("TwisearchSlackbot")
 

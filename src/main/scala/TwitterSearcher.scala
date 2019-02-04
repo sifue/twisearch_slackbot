@@ -14,15 +14,17 @@ import scala.util.matching.Regex
 case class SearchTwitter(keyword: String)
 
 /**
- * Actor of Searcher.
- * @param slackClient
- * @param intervalSec
- * @param ignoreScreenNames
- * @param ignoreRegex
- * @param isSendRetweet
- * @param messageFormat
- * @param twitter
- */
+  * Actor of Searcher.
+  * @param slackClient
+  * @param hubotClient
+  * @param intervalSec
+  * @param ignoreScreenNames
+  * @param ignoreRegex
+  * @param isSendRetweet
+  * @param messageFormat
+  * @param rtMessageFormat
+  * @param twitter
+  */
 class TwitterSearcher(
                        slackClient: SlackClient,
                        hubotClient: HubotClient,
@@ -31,6 +33,7 @@ class TwitterSearcher(
                        ignoreRegex: String,
                        isSendRetweet: Boolean,
                        messageFormat: String,
+                       rtMessageFormat: String,
                        twitter: Twitter
   ) extends Actor with ActorLogging {
   var maxId = 0L
@@ -77,13 +80,21 @@ class TwitterSearcher(
   }
 
   private def sendTweetToSlack(t: Status): Unit = {
-    val message = messageFormat.format(t.getUser().getScreenName(), t.getId())
+    val message = if(t.isRetweet) {
+      rtMessageFormat.format(t.getUser().getScreenName(), t.getId())
+    } else {
+      messageFormat.format(t.getUser().getScreenName(), t.getId())
+    }
     slackClient.postMessage(message)
     log.info(s"Tweet to Slack: @${t.getUser().getScreenName()} ${t.getText()}")
   }
 
   private def sendTweetToHubot(t: Status): Unit = {
-    val message = messageFormat.format(t.getUser().getScreenName(), t.getId())
+    val message = if(t.isRetweet) {
+      rtMessageFormat.format(t.getUser().getScreenName(), t.getId())
+    } else {
+      messageFormat.format(t.getUser().getScreenName(), t.getId())
+    }
     hubotClient.postMessage(message)
     log.info(s"Tweet to Hubot: @${t.getUser().getScreenName()}")
   }
