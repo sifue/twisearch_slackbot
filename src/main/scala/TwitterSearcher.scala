@@ -89,7 +89,7 @@ class TwitterSearcher(
         t.getRetweetCount()
       )
     } else {
-      messageFormat.format(t.getUser().getScreenName(), t.getId())
+      messageFormat.format(t.getUser().getScreenName(), t.getId(), t.getText())
     }
     slackClient.postMessage(message)
     log.info(s"Tweet to Slack: @${t.getUser().getScreenName()} ${t.getText()}")
@@ -105,7 +105,7 @@ class TwitterSearcher(
         t.getRetweetCount()
       )
     } else {
-      messageFormat.format(t.getUser().getScreenName(), t.getId())
+      messageFormat.format(t.getUser().getScreenName(), t.getId(), t.getText())
     }
     hubotClient.postMessage(message)
     log.info(s"Tweet to Hubot: @${t.getUser().getScreenName()}")
